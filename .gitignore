@@ -1,0 +1,4 @@
+*.pyc
+*.sqlite3
+tweet/migrations/
+tweet/__pycache__/
