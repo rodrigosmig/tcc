@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 from django.conf import settings
-from tweet.models import Tweet
+from tweet.models import Tweet, Search
 from datetime import datetime, timezone
 import numpy as np
 import requests
@@ -30,7 +30,7 @@ def search(request):
         session = OAuth1Session(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
         url = "https://api.twitter.com/1.1/search/tweets.json?lang=pt&q=" + search_word + "&count=30&tweet_mode=extended"
-        print(url)
+
         response = session.get(url)
 
         tweets = json.loads(response.content.decode('utf-8'))
@@ -55,15 +55,22 @@ def search(request):
         #carrega o modelo gravado em arquivo
         text_clf = pickle.load(open(settings.MEDIA_ROOT + "/model.sav", 'rb'))
 
+        #classifica os tweets
         predicted = text_clf.predict(user_tweets)
         
+        #salva o termo de busca
+        search = Search()
+        search.expression = expression
+        search.save()
+
         for x in range(len(predicted)):
             user_model = Tweet()
             user_model.user = user_data[x]['username']
             user_model.tweet_date = user_data[x]['data']
             user_model.tweet_id = user_data[x]['tweet_id']
+            user_model.tweet_text = user_data[x]['tweet']
             user_model.classification = predicted[x]
-            user_model.search = search_word
+            user_model.search = search
             user_model.save()
 
     template = 'tweet/index.html'

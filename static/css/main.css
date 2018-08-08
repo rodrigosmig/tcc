@@ -1,0 +1,15 @@
+.termo-busca {
+    width: 50%;
+    height: 60px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15%;
+}
+
+.termo-busca input, .termo-busca button {
+    border-radius: 25px;
+}
+
+.termo-busca button {
+    font-size: 30px;
+}

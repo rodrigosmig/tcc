@@ -8,14 +8,38 @@
     <title>Tweets</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/main.css' %}" />
 </head>
 <body>
+    <nav class="navbar fixed-top">
+        <a class="navbar-brand" href="#">Logo</a>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Contato</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Sobre</a>
+            </li>
+        </ul>
+    </nav>
+
+    <br><br><br><br>
     <form action="" method="post">
         {% csrf_token %} 
-        <input type="text" name='expression' placeholder="Digite a expressão">
-        <input type="submit" value="Enviar">
+        <!-- <input type="text" name='expression' placeholder="Digite a expressão">
+        <input type="submit" value="Enviar"> -->
+        <div class="input-group mb-3 termo-busca">
+            <input type="text" class="form-control" name='expression' placeholder="Digite o termo de busca" aria-label="Digite o termo de busca" required>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" title="buscar">
+                        <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
     </form>
+
+    
     
 
 
