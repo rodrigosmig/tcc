@@ -13,6 +13,7 @@ import requests
 import json
 import pickle
 import pytz
+import numbers
 
 def search(request):
     if(request.method == 'POST'):
@@ -84,28 +85,47 @@ def classification(request):
 
     with open(settings.MEDIA_ROOT + "/taspt-dataset.csv", 'r') as original_file:
         linha = original_file.readline().replace('\n', '')
-        count = 0
+        line_full = ""
+
         for line in original_file:
             #retira a quebra de linha
             line = line.replace('\n', '')
+            id = None
+            try:
+                id = int(line[:1])
+                line_full = line
+                print(id)
+            except ValueError:
+                line_full += line
+                print(id)
+                continue
+            
             #adiciona a linha no dataset e insere o indice na lista de classificação, 0 para positivo e 1 para negativo
-            if(":)" in line):
-                categories.append(0)
-                #retira o emoticon da linha
-                line = line.replace(":)", "")
-                dataset.append(line)
-            elif(":-)" in line):
-                categories.append(0)
-                line = line.replace(":-)", "")
-                dataset.append(line)
-            elif(":(" in line):
-                categories.append(1)
-                line = line.replace(":(", "")
-                dataset.append(line)
-            elif(":-(" in line):
-                categories.append(1)
-                line = line.replace(":-(", "")
-                dataset.append(line)
+            if(id):
+                if(":)" in line_full):
+                    categories.append(0)
+                    #retira o emoticon da linha
+                    line_full = line_full.replace(":)", "")
+                    dataset.append(line_full)
+                elif(":-)" in line_full):
+                    categories.append(0)
+                    line_full = line_full.replace(":-)", "")
+                    dataset.append(line_full)
+                elif(":(" in line_full):
+                    categories.append(1)
+                    line_full = line_full.replace(":(", "")
+                    dataset.append(line_full)
+                elif(":-(" in line_full):
+                    categories.append(1)
+                    line_full = line_full.replace(":-(", "")
+                    dataset.append(line_full)
+                """ if(id):
+                    print("Não nulo")
+                else:
+                    print("None") """
+
+    for x in range(20):
+        print(dataset[x])
 
     array_np = np.array(categories)
 
@@ -113,6 +133,9 @@ def classification(request):
         ('tfidf', TfidfTransformer()),
         ('clf', MultinomialNB()),
     ])
+
+    """ for y in dataset:
+        print(y) """
 
     text_clf.fit(dataset, array_np)
 

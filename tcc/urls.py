@@ -16,13 +16,19 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
+from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 from tweet import views
+from tweet.api.viewsets import TweetViewSet
+
+router = routers.DefaultRouter()
+router.register(r'tweets', TweetViewSet, base_name='Tweets')
 
 urlpatterns = [
+    url('', include(router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^tweets/', include('tweet.urls', namespace='principal')),
+    url(r'^tweets2/', include('tweet.urls', namespace='principal')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
