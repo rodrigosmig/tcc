@@ -1,9 +1,36 @@
+/* body {
+    position: relative;
+    background-image: url("/static/img/background.jpg");
+    background-color: #cccccc;
+    background-repeat:no-repeat;
+    background-size:100% 100vh;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+ } */
+
+ body:before {
+	content: '';
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background-image: url("/static/img/background.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-filter: blur(3px);
+    -moz-filter: blur(3px);
+    -o-filter: blur(3px);
+    -ms-filter: blur(3px);
+    filter: blur(3px);
+}
+
 .termo-busca {
-    width: 50%;
+    width: 40%;
     height: 60px;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 15%;
 }
 
 .termo-busca input, .termo-busca button {
