@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
 from tweet.models import Search, Tweet
 from .serializers import TweetSerializer
 from requests_oauthlib import OAuth1Session
@@ -72,9 +73,11 @@ class TweetViewSet(ModelViewSet):
                 user_model.search = search
                 user_model.save()
 
+            return Tweet.objects.filter(search = search)
 
         else:
-            print("não")
-
-        return Tweet.objects.filter(search = search)
-        
+            return Tweet.objects.all()
+    
+    def partial_update(self, request, *args, **kwargs):
+        print(request.query_params)
+        return super(TweetViewSet, self).partial_update(request, *args, **kwargs)

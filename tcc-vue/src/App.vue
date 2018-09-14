@@ -3,6 +3,9 @@
     <nav class="navbar fixed-top">
         <a class="navbar-brand" href="#">Logo</a>
         <ul class="nav justify-content-end">
+          <li class="nav-item">
+                <a class="nav-link active" href="#">Buscas</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link active" href="#">Contato</a>
             </li>

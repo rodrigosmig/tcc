@@ -79,7 +79,7 @@ def search(request):
     return render(request, template)
 
 def classification(request):
-    classificacao = ['positivo', 'negativo']
+    classificacao = ['negativo', 'positivo']
     categories = [] #array com a mesma função do twenty_train.target
     dataset = []
 
@@ -103,20 +103,20 @@ def classification(request):
             #adiciona a linha no dataset e insere o indice na lista de classificação, 0 para positivo e 1 para negativo
             if(id):
                 if(":)" in line_full):
-                    categories.append(0)
+                    categories.append(1)
                     #retira o emoticon da linha
                     line_full = line_full.replace(":)", "")
                     dataset.append(line_full)
                 elif(":-)" in line_full):
-                    categories.append(0)
+                    categories.append(1)
                     line_full = line_full.replace(":-)", "")
                     dataset.append(line_full)
                 elif(":(" in line_full):
-                    categories.append(1)
+                    categories.append(0)
                     line_full = line_full.replace(":(", "")
                     dataset.append(line_full)
                 elif(":-(" in line_full):
-                    categories.append(1)
+                    categories.append(0)
                     line_full = line_full.replace(":-(", "")
                     dataset.append(line_full)
                 """ if(id):

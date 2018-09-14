@@ -11,35 +11,33 @@
             <div v-if="display" class="panel panel-info">
                                 
                 <div class="panel-heading">
-                    <h4 class="media-heading">Media heading</h4>
+                    <h4 class="media-heading">Busca: <strong>{{search}}</strong></h4>
                 </div>
 
-                <div class="media-body">
-                    <p>Classificação: <strong>Positiva</strong></p>
-                    <span class="user">@Usuário</span>
-                    <div class="tweet">Dolorem aspernatur rerum, iure? Culpa iste aperiam sequi, fuga, quasi rerum, eum, quo natus tenetur officia placeat.</div>
+                <div v-for="(tweet, index) in tweets" :key="tweet.id" class="media-body">
+                    <p>
+                        <span v-if="tweet.classification == 1">
+                            Classificação: <strong style="color: blue">Positiva</strong>
+                        </span>
+                        <span v-else>
+                            Classificação: <strong style="color: red">Negativa</strong>
+                        </span>
+                    </p>
+                    <span class="user">@{{tweet.user}}</span>
+                    <div class="tweet">{{tweet.tweet_text}}</div>
                     <div class="correcao">Corrigir classificação:</div>
                     <ul class="nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#"><i class="fas fa-thumbs-up"></i></a>
+                        <li v-if="tweet.classification == 1" class="nav-item">
+                            <span class="nav-link"><i class="fas fa-thumbs-up" style="color: blue"></i></span>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-thumbs-down"></i></a>
+                        <li v-else class="nav-item">
+                            <a @click="toPositive(index, tweet.id)" class="nav-link" href="javascript:void(0)"><i class="fas fa-thumbs-up" style="color: blue"></i></a>
                         </li>
-                    </ul>
-                </div>
-
-                <div class="media-body">
-                    <p>Classificação: <strong>Positiva</strong></p>
-                    <span class="user">@Usuário</span>
-                    <div class="tweet">Dolorem aspernatur rerum, iure? Culpa iste aperiam sequi, fuga, quasi rerum, eum, quo natus tenetur officia placeat.</div>
-                    <div class="correcao">Corrigir classificação:</div>
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#"><i class="fas fa-thumbs-up"></i></a>
+                        <li v-if="tweet.classification == 0" class="nav-item">
+                            <span class="nav-link"><i class="fas fa-thumbs-down" style="color: red"></i></span>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-thumbs-down"></i></a>
+                        <li v-else class="nav-item">
+                            <a @click="toNegative(index, tweet.id)" class="nav-link" href="javascript:void(0)"><i class="fas fa-thumbs-down" style="color: red"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -62,30 +60,54 @@
 </template>
 
 <script>
+    import axios from 'axios'
+
     export default {
         name: 'Classificados',
         created() {
             this.search = this.$route.params.search_id;
             if(this.$route.query.display) {
-                const url = "http://localhost:8000/tweets/?search=" + this.search
+                //const url = "http://localhost:8000/tweets/?search=" + this.search
+                
                 this.loading = true;
-                /* axios.get(url).then(tweets => {
-                    console.log(tweets.data);                
-                }) */
+                axios.get(this.url + "?search=" + this.search).then(tweets => {
+                    this.tweets = tweets.data;
+                    this.loading = false;              
+                })
                 this.display = this.$route.query.display;
             }
-            this.loading = false;
+           
         },
         data () {
             return {
                 display : false,
                 search: "",
-                loading: false
+                loading: false,
+                tweets: [],
+                url: "http://localhost:8000/tweets/"
         }
     },
         methods: {
-            collect_tweets: function() {
-          
+            toPositive: function(index, id) {
+                axios.patch(this.url + id + "/", {"classification": 1}).then(response => {
+                    console.log(response)
+                    let change = this.tweets[index]
+                    change.classification = "1"
+                    this.tweets.splice(index, 1, change)              
+                }).catch(error => {
+                    alert("Classificação não alterada. Tente novamente.")
+                })
+            },
+            toNegative: function(index, id) {
+                console.log("negativo")
+                axios.patch(this.url + id + "/", {"classification": 0}).then(response => {
+                    console.log(response)
+                    let change = this.tweets[index]
+                    change.classification = "0"
+                    this.tweets.splice(index, 1, change)              
+                }).catch(error => {
+                    alert("Classificação não alterada. Tente novamente.")
+                })
             }
         }
     }
@@ -93,6 +115,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    ul li a:link, a:visited {
+        text-decoration: none;
+    }
     #loading span {
         font-size: 35px;
     }
@@ -108,6 +133,8 @@
     .media-body {
         background-color: white;
         padding-top: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     .panel-info {
@@ -133,6 +160,6 @@
 
     .correcao {
         padding-top: 10px;
-        color: red;
+        
     }
 </style>
