@@ -20,10 +20,11 @@ from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 from tweet import views
-from tweet.api.viewsets import TweetViewSet
+from tweet.api.viewsets import TweetViewSet, SearchViewSet
 
 router = routers.DefaultRouter()
 router.register(r'tweets', TweetViewSet, base_name='Tweets')
+router.register(r'buscas', SearchViewSet, base_name='buscas')
 
 urlpatterns = [
     url('', include(router.urls)),

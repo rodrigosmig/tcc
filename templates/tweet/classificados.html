@@ -1,0 +1,71 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tweets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{% static 'css/main.css' %}" />
+</head>
+<body>
+    <nav class="navbar fixed-top">
+        <a class="navbar-brand" href="#">Logo</a>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Contato</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Sobre</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content col-md-6">
+        <div id="loading">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
+            <span>...coletando tweets</span>
+        </div>
+        <!-- só exibira a div se uma pesquisa for realizada -->
+        <div class="panel panel-info">
+                            
+            <div class="panel-heading">
+                <h4 class="media-heading">Busca: <strong>{{search}}</strong></h4>
+            </div>
+
+            <div class="media-body">
+                <p>
+                    <span>
+                        Classificação: <strong style="color: blue">Positiva</strong>
+                    </span>
+                    
+                </p>
+                <span class="user">@rodrigosmig</span>
+                <div class="tweet">fdgdslfgdslfç kldsfkn ldknf gçlksdnfçlgkjpeojrojqó jotioqij toqierjtqertjqerk</div>
+                <div class="correcao">Corrigir classificação:</div>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <span class="nav-link"><i class="fas fa-thumbs-up" style="color: blue"></i></span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link"><i class="fas fa-thumbs-down" style="color: red"></i></span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        
+        
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/tweets.js' %}"></script>
+
+</body>
+</html>

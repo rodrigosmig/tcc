@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from tweet.models import Search, Tweet
-from .serializers import TweetSerializer
+from .serializers import TweetSerializer, SearchSerializer
 from requests_oauthlib import OAuth1Session
 from datetime import datetime, timezone
 from django.conf import settings
@@ -81,3 +81,7 @@ class TweetViewSet(ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         print(request.query_params)
         return super(TweetViewSet, self).partial_update(request, *args, **kwargs)
+
+class SearchViewSet(ModelViewSet):
+    queryset = Search.objects.all()
+    serializer_class = SearchSerializer

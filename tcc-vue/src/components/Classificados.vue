@@ -1,14 +1,13 @@
 <template>
+
     <div>
-        <br><br><br><br>
-        
         <div class="content col-md-6">
             <div v-show="loading" id="loading">
                 <i class="fa fa-spinner fa-pulse fa-3x fa-fw" ></i>
                 <span>...coletando tweets</span>
             </div>
             <!-- só exibira a div se uma pesquisa for realizada -->
-            <div v-if="display" class="panel panel-info">
+            <div v-if="display && search != null" class="panel panel-info">
                                 
                 <div class="panel-heading">
                     <h4 class="media-heading">Busca: <strong>{{search}}</strong></h4>
@@ -45,9 +44,7 @@
             </div>
 
             <div v-else>
-                <div class="alert alert-danger" role="alert">
-                    <strong>Ops!</strong> É preciso realizar uma busca para coletar e classificar os tweets.
-                </div>
+                <b-alert show variant="danger"><strong>Ops!</strong> É preciso realizar uma busca para coletar e classificar os tweets.</b-alert>
                 <router-link :to="{ name: 'Home'}">
                     <button class="btn btn-primary" type="submit">Voltar</button>
                 </router-link>
@@ -56,7 +53,7 @@
             
         </div>
     </div>
-    
+
 </template>
 
 <script>
@@ -66,11 +63,12 @@
         name: 'Classificados',
         created() {
             this.search = this.$route.params.search_id;
-            if(this.$route.query.display) {
+            if(this.$route.query.display && this.search != "") {
                 //const url = "http://localhost:8000/tweets/?search=" + this.search
                 
                 this.loading = true;
-                axios.get(this.url + "?search=" + this.search).then(tweets => {
+                /* axios.get(this.url + "?search=" + this.search).then(tweets => { */
+                axios.get(this.url).then(tweets => {
                     this.tweets = tweets.data;
                     this.loading = false;              
                 })
@@ -81,10 +79,10 @@
         data () {
             return {
                 display : false,
-                search: "",
+                search: null,
                 loading: false,
                 tweets: [],
-                url: "http://localhost:8000/tweets/"
+                url: "http://localhost:3000/tweets"
         }
     },
         methods: {
@@ -115,6 +113,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
     ul li a:link, a:visited {
         text-decoration: none;
     }
@@ -126,6 +125,7 @@
         text-align: center
     }
     .content {
+        margin-top: 70px;
         margin-left: auto;
         margin-right: auto;
     }

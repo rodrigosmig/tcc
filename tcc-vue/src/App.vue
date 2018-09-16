@@ -1,19 +1,22 @@
 <template>
-  <div id="app">
-    <nav class="navbar fixed-top">
-        <a class="navbar-brand" href="#">Logo</a>
-        <ul class="nav justify-content-end">
-          <li class="nav-item">
-                <a class="nav-link active" href="#">Buscas</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Contato</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Sobre</a>
-            </li>
-        </ul>
-    </nav>
+  <div>
+    <b-navbar toggleable="md" type="dark" variant="muted" fixed="top">
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-navbar-brand href="#">
+        <b-link :to="{ name: 'Home'}">Home</b-link>
+      </b-navbar-brand>
+      <b-collapse is-nav id="nav_collapse">
+
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item type="submit" v-b-tooltip.hover title="Buscas cadastradas">
+            <b-link :to="{ name: 'Buscas'}">Buscas</b-link>
+          </b-nav-item>          
+          <b-nav-item href="#">Contato</b-nav-item>
+          <b-nav-item href="#">Sobre</b-nav-item>
+        </b-navbar-nav>
+
+      </b-collapse>
+    </b-navbar>
     <router-view/>
   </div>
 </template>
@@ -25,7 +28,7 @@ export default {
 </script>
 
 <style>
-  body:before {
+  /* body:before {
     content: '';
     position: fixed;
     width: 100vw;
@@ -39,8 +42,12 @@ export default {
       -o-filter: blur(3px);
       -ms-filter: blur(3px);
       filter: blur(3px);
-  }
+  } */
   .navbar {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 1);
+  }
+  a, a:hover {
+    text-decoration: none;
+    color: inherit
   }
 </style>

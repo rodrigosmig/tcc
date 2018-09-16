@@ -1,18 +1,21 @@
 <template>
-    <div>
+    <div>      
       <div class="input-group mb-3 termo-busca">
-        <input type="text" class="form-control" v-model="search" placeholder="Digite o termo de busca" aria-label="Digite o termo de busca" required>
-        <div class="input-group-append">
-            <!-- <router-link :to="{ name: 'Classificados', params: { id: 1234 } }"> -->
-              <button class="btn btn-outline-secondary" @click="collect_tweets" type="submit" title="buscar">
-                <i class="fas fa-search"></i>
-              </button>
-            <!-- </router-link> -->
-        </div>
+        <b-input-group >
+          <b-form-input v-model="search" :state="error" type="text" placeholder="Digite o termo de busca"></b-form-input>
+          <b-input-group-append>
+            <b-button variant="outline-secondary" @click="collect_tweets" type="submit" title="buscar">
+              <i class="fas fa-search"></i>
+            </b-button>
+          </b-input-group-append>
+          <b-form-invalid-feedback id="inputLiveFeedback">
+            <!-- This will only be shown if the preceeding input has an invalid state -->
+            <span class="error">Digite no mínimo 3 letras.</span>
+          </b-form-invalid-feedback>
+        </b-input-group>
+
       </div>
-      <div v-if="display" class="alert alert-danger" role="alert">
-        Digite algum termo para a busca.
-      </div>
+      
     </div>
     
 </template>
@@ -25,13 +28,14 @@
     data () {
       return {
         search: '',
-        display: false
+        error: null,
+        name: ""
       }
     },
     methods: {
       collect_tweets: function() {
-          if(this.search == "") {
-            this.display = true;
+          if(this.search.length < 3) {
+            this.error = false
           }
           else {
             this.$router.push({
@@ -51,14 +55,19 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  #inputLiveFeedback {
+    margin-left: 5px
+  }
+  .error {
+    font-weight: bolder;
+    /* background-color: lightblue */
+  }
 .alert {
   text-align: center;
 }
 
 .termo-busca {
     width: 40%;
-    height: 60px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -70,5 +79,9 @@
 
 .termo-busca button {
     font-size: 30px;
+}
+
+.termo-busca input {
+    height: 60px;
 }
 </style>
