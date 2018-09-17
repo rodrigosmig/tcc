@@ -75,12 +75,16 @@ class TweetViewSet(ModelViewSet):
 
             return Tweet.objects.filter(search = search)
 
+        elif(self.request.query_params.get('search_id')):
+            search_id = self.request.query_params.get('search_id')
+            return Tweet.objects.filter(search = search_id)
+
         else:
             return Tweet.objects.all()
     
-    def partial_update(self, request, *args, **kwargs):
+"""     def partial_update(self, request, *args, **kwargs):
         print(request.query_params)
-        return super(TweetViewSet, self).partial_update(request, *args, **kwargs)
+        return super(TweetViewSet, self).partial_update(request, *args, **kwargs) """
 
 class SearchViewSet(ModelViewSet):
     queryset = Search.objects.all()

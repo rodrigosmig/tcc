@@ -1,25 +1,34 @@
 <template>
   <div class="content">
-    <b-table :items="items" :fields="fields">
-    <template slot="show_details" slot-scope="row">
+    <b-table :items="searchs" :fields="fields">
+    <template slot="show_details" slot-scope="tweet">
       <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
-      <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
-       {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+      <b-button size="sm" @click.stop="tweet.toggleDetails" @click="getTweets(tweet.item.id)" class="mr-2">
+       {{ tweet.detailsShowing ? 'Hide' : 'Show'}} Details
       </b-button>
       <!-- In some circumstances you may need to use @click.native.stop instead -->
       <!-- As `row.showDetails` is one-way, we call the toggleDetails function on @change -->
     </template>
-    <template slot="row-details" slot-scope="row">
-      <b-card>
+    <template slot="row-details" slot-scope="tweet">
+      <b-card v-for="t in tweet_data" :key="t.id">
         <b-row class="mb-2">
-          <b-col sm="3" class="text-sm-right"><b>Age:</b></b-col>
-          <b-col>{{ row.item.age }}</b-col>
+          <b-col sm="3" class="text-sm-right"><b>Usuário:</b></b-col>
+          <b-col>@{{ t.user }}</b-col>
         </b-row>
         <b-row class="mb-2">
-          <b-col sm="3" class="text-sm-right"><b>Is Active:</b></b-col>
-          <b-col>{{ row.item.isActive }}</b-col>
+          <b-col sm="3" class="text-sm-right"><b>Tweet:</b></b-col>
+          <b-col>{{ t.tweet_text }}</b-col>
         </b-row>
-        <b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>
+        <b-row class="mb-2">
+          <b-col sm="3" class="text-sm-right"><b>Classificação:</b></b-col>
+          <b-col v-if="t.classification == 1">
+            <i class="fas fa-thumbs-up" style="color: blue"></i>
+          </b-col>
+          <b-col v-else>
+            <i class="fas fa-thumbs-down" style="color: red"></i>
+          </b-col>
+        </b-row>
+        <!-- <b-button size="sm" @click="tweet.toggleDetails">Hide Details</b-button> -->
       </b-card>
     </template>
   </b-table>
@@ -75,18 +84,51 @@
   import axios from 'axios'
   import moment from 'moment'
   export default {
-  data () {
-    return {
-      fields: [ 'first_name', 'last_name', 'show_details' ],
-      items: [
-        { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson', _showDetails: true },
-        { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
-      ]
+    created() {
+      axios.get(this.url + "buscas/").then(response => {
+        this.searchs = response.data;
+        console.log(this.searchs)
+      })
+    },
+    data () {
+      return {
+        fields: {
+            expression: {
+              sortable: false,
+              label: 'Expressão'
+            },
+            search_date: {
+              sortable: true,
+              label: 'Data da Busca',
+              formatter: (value, key, item) => {
+                return moment(String(value)).format('MM/DD/YYYY hh:mm')
+              }
+            },
+            show_details: {
+              label: 'Tweets'
+            }
+          },
+        /* items: [
+          { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
+          { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson', _showDetails: true },
+          { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
+        ], */
+        searchs: [],
+        url: "http://localhost:8000/",
+        tweet_data: []
+      }
+    },
+    methods: {
+      getTweets(id) {
+        console.log(this.url + "tweets/?search_id=" + id)
+        axios.get(this.url + "tweets/?search_id=" + id).then(response => {
+          console.log(response.data)
+          this.tweet_data = response.data
+        })
+      }
     }
   }
-}
   /* export default {
     name: 'Buscas',
       created() {

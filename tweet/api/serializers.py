@@ -9,4 +9,4 @@ class TweetSerializer(ModelSerializer):
 class SearchSerializer(ModelSerializer):
     class Meta:
         model = Search
-        fields = ('expression', 'search_date')
+        fields = ('id', 'expression', 'search_date')
