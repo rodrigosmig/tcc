@@ -1,4 +1,9 @@
+### Django ###
+*.log
+*.pot
 *.pyc
-*.sqlite3
-tweet/migrations/
-tweet/__pycache__/
+__pycache__/
+**/migrations/
+local_settings.py
+db.sqlite3
+media
