@@ -63,18 +63,14 @@
         name: 'Classificados',
         created() {
             this.search = this.$route.params.search_id;
-            if(this.$route.query.display && this.search != "") {
-                //const url = "http://localhost:8000/tweets/?search=" + this.search
-                
+            if(this.$route.query.display && this.search != "") {           
                 this.loading = true;
-                /* axios.get(this.url + "?search=" + this.search).then(tweets => { */
-                axios.get(this.url).then(tweets => {
+                axios.get(this.url + "?search=" + this.search).then(tweets => {
                     this.tweets = tweets.data;
                     this.loading = false;              
                 })
                 this.display = this.$route.query.display;
-            }
-           
+            }           
         },
         data () {
             return {
@@ -82,13 +78,12 @@
                 search: null,
                 loading: false,
                 tweets: [],
-                url: "http://localhost:3000/tweets"
+                url: "http://localhost:8000/tweets/"
         }
     },
         methods: {
             toPositive: function(index, id) {
                 axios.patch(this.url + id + "/", {"classification": 1}).then(response => {
-                    console.log(response)
                     let change = this.tweets[index]
                     change.classification = "1"
                     this.tweets.splice(index, 1, change)              
@@ -97,7 +92,6 @@
                 })
             },
             toNegative: function(index, id) {
-                console.log("negativo")
                 axios.patch(this.url + id + "/", {"classification": 0}).then(response => {
                     console.log(response)
                     let change = this.tweets[index]
@@ -111,7 +105,6 @@
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
     ul li a:link, a:visited {
