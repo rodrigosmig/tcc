@@ -31,7 +31,7 @@ SECRET_KEY = '_#_n=k&4a+zfqvrc$d+5qu37k3%)&*hh-9cdj_z-(iozb3q4(m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', 'analise-de-sentimento.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'analise-sentimento.herokuapp.com']
 
 
 # Application definition
