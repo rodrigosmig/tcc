@@ -5,6 +5,7 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
+from sklearn.linear_model import SGDClassifier
 from django.conf import settings
 from tweet.models import Tweet, Search
 from datetime import datetime, timezone
@@ -78,54 +79,36 @@ def search(request):
 
     return render(request, template)
 
-def classification(request):
+def multinomialNB(request):
     classificacao = ['negativo', 'positivo']
     categories = [] #array com a mesma função do twenty_train.target
     dataset = []
 
-    with open(settings.MEDIA_ROOT + "/taspt-dataset.csv", 'r') as original_file:
+    with open(settings.MEDIA_ROOT + "/taspt-dataset-alterado.csv", 'r') as original_file:
         linha = original_file.readline().replace('\n', '')
-        line_full = ""
 
         for line in original_file:
             #retira a quebra de linha
             line = line.replace('\n', '')
-            id = None
-            try:
-                id = int(line[:1])
-                line_full = line
-                print(id)
-            except ValueError:
-                line_full += line
-                print(id)
-                continue
             
             #adiciona a linha no dataset e insere o indice na lista de classificação, 0 para positivo e 1 para negativo
-            if(id):
-                if(":)" in line_full):
-                    categories.append(1)
-                    #retira o emoticon da linha
-                    line_full = line_full.replace(":)", "")
-                    dataset.append(line_full)
-                elif(":-)" in line_full):
-                    categories.append(1)
-                    line_full = line_full.replace(":-)", "")
-                    dataset.append(line_full)
-                elif(":(" in line_full):
-                    categories.append(0)
-                    line_full = line_full.replace(":(", "")
-                    dataset.append(line_full)
-                elif(":-(" in line_full):
-                    categories.append(0)
-                    line_full = line_full.replace(":-(", "")
-                    dataset.append(line_full)
-                """ if(id):
-                    print("Não nulo")
-                else:
-                    print("None") """
-
-    for x in range(20):
-        print(dataset[x])
+            if(":)" in line):
+                categories.append(1)
+                #retira o emoticon da linha
+                line = line.replace(":)", "")
+                dataset.append(line)
+            elif(":-)" in line):
+                categories.append(1)
+                line = line.replace(":-)", "")
+                dataset.append(line)
+            elif(":(" in line):
+                categories.append(0)
+                line = line.replace(":(", "")
+                dataset.append(line)
+            elif(":-(" in line):
+                categories.append(0)
+                line = line.replace(":-(", "")
+                dataset.append(line)
 
     array_np = np.array(categories)
 
@@ -133,9 +116,6 @@ def classification(request):
         ('tfidf', TfidfTransformer()),
         ('clf', MultinomialNB()),
     ])
-
-    """ for y in dataset:
-        print(y) """
 
     text_clf.fit(dataset, array_np)
 
@@ -148,4 +128,58 @@ def classification(request):
     for doc, category in zip(docs_new, predicted):
         print('%r => %s' % (doc, classificacao[category]))
     
-    return HttpResponse("Classificação realizada")
+    return HttpResponse("Classificação realizada - NB")
+
+
+def sdgClassifier(request):
+    classificacao = ['negativo', 'positivo']
+    categories = [] #array com a mesma função do twenty_train.target
+    dataset = []
+
+    with open(settings.MEDIA_ROOT + "/taspt-dataset-alterado.csv", 'r') as original_file:
+        linha = original_file.readline().replace('\n', '')
+
+        for line in original_file:
+            #retira a quebra de linha
+            line = line.replace('\n', '')
+            
+            #adiciona a linha no dataset e insere o indice na lista de classificação, 0 para positivo e 1 para negativo
+            if(":)" in line):
+                categories.append(1)
+                #retira o emoticon da linha
+                line = line.replace(":)", "")
+                dataset.append(line)
+            elif(":-)" in line):
+                categories.append(1)
+                line = line.replace(":-)", "")
+                dataset.append(line)
+            elif(":(" in line):
+                categories.append(0)
+                line = line.replace(":(", "")
+                dataset.append(line)
+            elif(":-(" in line):
+                categories.append(0)
+                line = line.replace(":-(", "")
+                dataset.append(line)
+
+    array_np = np.array(categories)
+
+    text_clf = Pipeline([('vect', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('clf', SGDClassifier(loss='hinge', penalty='l2',
+                            alpha=1e-3, random_state=42,
+                            max_iter=5, tol=None)),
+    ])
+    
+    text_clf.fit(dataset, array_np)
+
+    pickle.dump(text_clf, open(settings.MEDIA_ROOT + "/model.sav", 'wb'))
+
+    docs_new = ['O filme é divertido, mas o final estraga tudo', 'o filme todo é uma porcaria', 'Achei o programa muito chato', 'o filme me fez chorar', 'o filme me fez rir']
+
+    predicted = text_clf.predict(docs_new)
+
+    for doc, category in zip(docs_new, predicted):
+        print('%r => %s' % (doc, classificacao[category]))
+    
+    return HttpResponse("Classificação realizada - SGD")

@@ -29,7 +29,7 @@ router.register(r'buscas', SearchViewSet, base_name='buscas')
 urlpatterns = [
     url('', include(router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^tweets2/', include('tweet.urls', namespace='principal')),
+    url(r'^classificacao/', include('tweet.urls', namespace='principal')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -4,5 +4,6 @@ from tweet import views
 
 urlpatterns = [    
     url(r'^$', views.search, name='index'),
-    url(r'^classification/', views.classification, name='classification'),
+    url(r'^nb/', views.multinomialNB, name='nb'),
+    url(r'^sgd/', views.sdgClassifier, name='sdg'),
 ]
