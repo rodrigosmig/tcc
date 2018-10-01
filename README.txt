@@ -7,21 +7,15 @@ Django Rest Framework
 Django CORS Headers
 scikit-learn
 Numpy
-NodeJS
-VueJS
-BootstrapVue
-Moment
-Axios
 
 ~~ ANTES DE EXECUTAR A PRIMEIRA VEZ
-tcc$ sudo pip install -r requirements.txt
-tcc/tcc-vue$ npm install
+pip install -r requirements.txt
+
 
 ~~ EXECUTAR APENAS NA PRIMEIRA VEZ OU QUANDO O MODEL FOR MODIFICADO
-tcc$ python manage.py makemigrations
-tcc$ python manage.py migrate
-tcc$ python manage.py createsuperuser
+python manage.py makemigrations
+python manage.py migrate
 
 ~~ EXECUTAR O PROJETO
-tcc$ python manage.py runserver
-tcc/tcc-vue$ npm run dev
+python manage.py runserver
+
