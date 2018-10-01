@@ -9,7 +9,7 @@ scikit-learn
 Numpy
 
 ~~ ANTES DE EXECUTAR A PRIMEIRA VEZ
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 
 ~~ EXECUTAR APENAS NA PRIMEIRA VEZ OU QUANDO O MODEL FOR MODIFICADO
