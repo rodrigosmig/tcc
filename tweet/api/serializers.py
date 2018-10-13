@@ -4,7 +4,7 @@ from tweet.models import Tweet, Search
 class TweetSerializer(ModelSerializer):
     class Meta:
         model = Tweet
-        fields = ('id', 'user', 'tweet_id', 'tweet_date', 'tweet_text', 'classification', 'search')
+        fields = ('id', 'user', 'tweet_id', 'tweet_date', 'tweet_text', 'classification', 'change', 'search')
 
 class SearchSerializer(ModelSerializer):
     class Meta:

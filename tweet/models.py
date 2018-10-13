@@ -10,5 +10,6 @@ class Tweet(models.Model):
     tweet_date = models.DateTimeField()
     tweet_text = models.CharField(max_length = 280)
     classification = models.CharField(max_length = 1)
+    change = models.BooleanField(default = False)
     search = models.ForeignKey(Search, on_delete = models.CASCADE)
 

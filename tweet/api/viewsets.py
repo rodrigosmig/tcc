@@ -82,9 +82,15 @@ class TweetViewSet(ModelViewSet):
         else:
             return Tweet.objects.all()
     
-"""     def partial_update(self, request, *args, **kwargs):
-        print(request.query_params)
-        return super(TweetViewSet, self).partial_update(request, *args, **kwargs) """
+    def partial_update(self, request, *args, **kwargs):
+        tweet = Tweet.objects.get(pk = kwargs['pk'])
+        tweet.classification = request.data['classification']
+        tweet.change = True
+        tweet.save()
+        serialized = TweetSerializer(tweet)
+        
+        #return super(TweetViewSet, self).partial_update(request, *args, **kwargs)
+        return Response(serialized.data)
 
 class SearchViewSet(ModelViewSet):
     queryset = Search.objects.all()
